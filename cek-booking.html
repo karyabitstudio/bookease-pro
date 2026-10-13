@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cek Status Booking â€” BookEase Pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: { 50:'#eff6ff',100:'#dbeafe',500:'#3b82f6',600:'#2563eb',700:'#1d4ed8' } },
+          fontFamily: { sans: ['Inter','system-ui','sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>body{font-family:'Inter',system-ui,sans-serif}</style>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen">
+
+  <nav class="bg-white border-b border-slate-200 sticky top-0 z-40">
+    <div class="max-w-lg mx-auto px-4 h-14 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2 font-bold text-primary-700">
+        <i class="fa-solid fa-arrow-left text-sm"></i> BookEase Pro
+      </a>
+      <span class="text-sm text-slate-500">Cek Status</span>
+    </div>
+  </nav>
+
+  <div class="max-w-lg mx-auto px-4 py-10">
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+      <div class="text-center mb-6">
+        <div class="w-14 h-14 bg-primary-100 text-primary-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-3">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+        <h1 class="text-xl font-bold">Cek Status Booking</h1>
+        <p class="text-sm text-slate-500 mt-1">Masukkan kode booking atau nomor WhatsApp</p>
+      </div>
+
+      <div class="space-y-4 mb-6">
+        <div>
+          <label class="block text-sm font-medium mb-1.5">Kode Booking</label>
+          <input type="text" id="search-code" placeholder="Contoh: BE-A3F2K9" class="w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-500 uppercase" />
+        </div>
+        <div class="text-center text-xs text-slate-400">â€” atau â€”</div>
+        <div>
+          <label class="block text-sm font-medium mb-1.5">Nomor WhatsApp</label>
+          <input type="tel" id="search-phone" placeholder="08xxxxxxxxxx" class="w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-500" />
+        </div>
+        <button onclick="searchBooking()" class="w-full bg-primary-600 text-white font-semibold py-3 rounded-xl hover:bg-primary-700 transition">
+          <i class="fa-solid fa-search mr-1"></i> Cari Booking
+        </button>
+      </div>
+
+      <div id="result" class="hidden"></div>
+      <div id="not-found" class="hidden text-center py-6">
+        <div class="w-12 h-12 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center text-xl mx-auto mb-3">
+          <i class="fa-solid fa-file-circle-xmark"></i>
+        </div>
+        <p class="text-slate-600 font-medium">Booking tidak ditemukan</p>
+        <p class="text-sm text-slate-400 mt-1">Periksa kembali kode atau nomor WhatsApp Anda</p>
+      </div>
+    </div>
+
+    <div class="text-center mt-6">
+      <a href="booking.html" class="text-sm text-primary-600 hover:underline">Belum punya booking? Buat sekarang â†’</a>
+    </div>
+  </div>
+
+  <script>
+    const statusBadge = {
+      pending: 'bg-amber-100 text-amber-700',
+      confirmed: 'bg-green-100 text-green-700',
+      done: 'bg-slate-100 text-slate-600',
+      cancelled: 'bg-red-100 text-red-700'
+    };
+    const statusLabel = { pending:'Menunggu Konfirmasi', confirmed:'Dikonfirmasi', done:'Selesai', cancelled:'Dibatalkan' };
+    const statusIcon = { pending:'fa-clock', confirmed:'fa-check-circle', done:'fa-flag-checkered', cancelled:'fa-ban' };
+
+    function getAllBookings() {
+      const stored = JSON.parse(localStorage.getItem('bookease_bookings') || '[]');
+      const defaults = [
+        { code:'BE-A3F2K9', name:'Rina Wijaya', phone:'081234567890', service:'Potong Rambut', staff:'Budi Santoso', date:'2026-10-13', time:'09:00', price:75000, status:'confirmed', duration:45 },
+        { code:'BE-B7M1P4', name:'Andi Pratama', phone:'081398765432', service:'Facial Treatment', staff:'Sari Dewi', date:'2026-10-13', time:'10:30', price:150000, status:'pending', duration:60 },
+      ];
+      return [...stored, ...defaults];
+    }
+
+    function searchBooking() {
+      const code = document.getElementById('search-code').value.trim().toUpperCase();
+      const phone = document.getElementById('search-phone').value.trim().replace(/\D/g,'');
+      const resultEl = document.getElementById('result');
+      const notFoundEl = document.getElementById('not-found');
+      resultEl.classList.add('hidden');
+      notFoundEl.classList.add('hidden');
+
+      if (!code && !phone) { alert('Masukkan kode booking atau nomor WhatsApp'); return; }
+
+      const all = getAllBookings();
+      let found = [];
+      if (code) found = all.filter(b => b.code === code);
+      else if (phone) found = all.filter(b => b.phone.replace(/\D/g,'').includes(phone) || phone.includes(b.phone.replace(/\D/g,'')));
+
+      if (found.length === 0) {
+        notFoundEl.classList.remove('hidden');
+        return;
+      }
+
+      resultEl.innerHTML = found.map(b => `
+        <div class="border border-slate-200 rounded-xl p-4 mb-3">
+          <div class="flex items-center justify-between mb-3">
+            <span class="font-mono font-bold text-sm">${b.code}</span>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-full ${statusBadge[b.status] || statusBadge.pending}">
+              <i class="fa-solid ${statusIcon[b.status] || 'fa-clock'} mr-1"></i>${statusLabel[b.status] || b.status}
+            </span>
+          </div>
+          <div class="space-y-1.5 text-sm">
+            <div class="flex justify-between"><span class="text-slate-500">Nama</span><span class="font-medium">${b.name}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">Layanan</span><span class="font-medium">${b.service}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">Staf</span><span class="font-medium">${b.staff}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">Tanggal</span><span class="font-medium">${formatDate(b.date)}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">Jam</span><span class="font-medium">${b.time}</span></div>
+            <div class="flex justify-between border-t border-slate-100 pt-2 mt-2"><span class="text-slate-500">Harga</span><span class="font-bold text-primary-700">Rp ${(b.price||0).toLocaleString('id-ID')}</span></div>
+          </div>
+        </div>
+      `).join('');
+      resultEl.classList.remove('hidden');
+    }
+
+    function formatDate(d) {
+      if (!d) return '-';
+      try { return new Date(d + 'T00:00:00').toLocaleDateString('id-ID', { weekday:'long', year:'numeric', month:'long', day:'numeric' }); }
+      catch { return d; }
+    }
+
+    // Allow Enter key
+    document.getElementById('search-code').addEventListener('keydown', e => { if (e.key==='Enter') searchBooking(); });
+    document.getElementById('search-phone').addEventListener('keydown', e => { if (e.key==='Enter') searchBooking(); });
+  </script>
+</body>
+</html>
+

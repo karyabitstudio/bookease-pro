@@ -1,0 +1,437 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BookEase Pro â€” Sistem Booking & Reservasi Online Lengkap</title>
+  <meta name="description" content="Sistem booking & reservasi online modern untuk salon, klinik, studio, rental, dan bisnis jasa. Kelola jadwal, staf, pelanggan, notifikasi WhatsApp, pembayaran online, dan laporan." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: { 50:'#eff6ff',100:'#dbeafe',200:'#bfdbfe',300:'#93c5fd',400:'#60a5fa',500:'#3b82f6',600:'#2563eb',700:'#1d4ed8',800:'#1e40af',900:'#1e3a8a' },
+            accent: { 400:'#22d3ee',500:'#06b6d4',600:'#0891b2' }
+          },
+          fontFamily: { sans: ['Inter','system-ui','sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .gradient-hero { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 40%, #2563eb 70%, #0891b2 100%); }
+    .card-hover { transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
+    .card-hover:hover { transform: translateY(-6px); box-shadow: 0 25px 50px -12px rgba(37,99,235,0.2); }
+    .feature-icon { transition: transform 0.3s; }
+    .card-hover:hover .feature-icon { transform: scale(1.1); }
+    @media (max-width: 639px) {
+      html { font-size: 15px; }
+    }
+  </style>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+  <!-- Navbar -->
+  <nav class="bg-white/90 backdrop-blur-lg sticky top-0 z-50 border-b border-slate-200/80">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between h-16">
+        <a href="index.html" class="flex items-center gap-2.5 font-extrabold text-xl tracking-tight">
+          <span class="w-9 h-9 bg-primary-600 text-white rounded-xl flex items-center justify-center shadow-lg shadow-primary-600/30">
+            <i class="fa-solid fa-calendar-check text-sm"></i>
+          </span>
+          BookEase <span class="text-accent-500">Pro</span>
+        </a>
+        <div class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600">
+          <a href="#fitur" class="hover:text-primary-600 transition">Fitur</a>
+          <a href="#cara-kerja" class="hover:text-primary-600 transition">Cara Kerja</a>
+          <a href="#bisnis" class="hover:text-primary-600 transition">Cocok Untuk</a>
+          <a href="#harga" class="hover:text-primary-600 transition">Harga</a>
+          <a href="cek-booking.html" class="hover:text-primary-600 transition">Cek Booking</a>
+          <a href="booking-saya.html" class="hover:text-primary-600 transition">Booking Saya</a>
+          <a href="admin.html" class="hover:text-primary-600 transition">Admin Demo</a>
+          <a href="booking.html" class="bg-primary-600 text-white px-5 py-2.5 rounded-xl hover:bg-primary-700 transition shadow-md shadow-primary-600/25 font-semibold">
+            Coba Booking
+          </a>
+        </div>
+        <button id="menu-btn" class="md:hidden w-10 h-10 flex items-center justify-center text-slate-600 text-xl rounded-lg hover:bg-slate-100">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 bg-white px-4 py-4 space-y-1">
+      <a href="#fitur" class="block py-2.5 px-3 rounded-lg hover:bg-slate-50">Fitur</a>
+      <a href="#cara-kerja" class="block py-2.5 px-3 rounded-lg hover:bg-slate-50">Cara Kerja</a>
+      <a href="#bisnis" class="block py-2.5 px-3 rounded-lg hover:bg-slate-50">Cocok Untuk</a>
+      <a href="#harga" class="block py-2.5 px-3 rounded-lg hover:bg-slate-50">Harga</a>
+      <a href="cek-booking.html" class="block py-2.5 px-3 rounded-lg hover:bg-slate-50">Cek Booking</a>
+      <a href="booking-saya.html" class="block py-2.5 px-3 rounded-lg hover:bg-slate-50">Booking Saya</a>
+      <a href="admin.html" class="block py-2.5 px-3 rounded-lg hover:bg-slate-50">Admin Demo</a>
+      <a href="booking.html" class="block mt-2 bg-primary-600 text-white text-center py-3 rounded-xl font-semibold">Coba Booking</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="gradient-hero text-white relative overflow-hidden">
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="absolute -top-32 -left-32 w-96 h-96 bg-primary-500/20 rounded-full blur-3xl"></div>
+      <div class="absolute top-1/2 -right-20 w-80 h-80 bg-accent-500/20 rounded-full blur-3xl"></div>
+    </div>
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-20 md:py-28 relative">
+      <div class="grid lg:grid-cols-2 gap-14 items-center">
+        <div>
+          <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/15 px-4 py-1.5 rounded-full text-sm mb-7">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-green-400"></span>
+            </span>
+            Contoh sistem booking online untuk bisnis jasa
+          </div>
+          <h1 class="text-4xl sm:text-5xl font-extrabold leading-[1.15] mb-6 tracking-tight">
+            Pelanggan Booking Sendiri.<br>
+            <span class="text-accent-400">Jadwal Anda Rapi.</span>
+          </h1>
+          <p class="text-lg text-blue-100/90 mb-9 leading-relaxed max-w-lg">
+            Tidak perlu lagi telepon atau chat bolak-balik minta jadwal. Pelanggan pilih sendiri lewat HP, Anda dapat notifikasi, jadwal tidak bentrok. Cocok untuk salon, klinik, studio, rental, gym, dan bisnis jasa lainnya.
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <a href="booking.html" class="inline-flex items-center gap-2 bg-white text-primary-800 font-bold px-7 py-3.5 rounded-xl hover:bg-blue-50 transition shadow-xl shadow-black/20">
+              <i class="fa-solid fa-calendar-plus"></i> Coba Demo Booking
+            </a>
+            <a href="admin.html" class="inline-flex items-center gap-2 bg-white/10 backdrop-blur border border-white/25 font-semibold px-7 py-3.5 rounded-xl hover:bg-white/20 transition">
+              <i class="fa-solid fa-gauge-high"></i> Lihat Admin Panel
+            </a>
+          </div>
+          <div class="flex flex-wrap items-center gap-x-6 gap-y-2 mt-10 text-sm text-blue-100/80">
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-check text-accent-400"></i> WhatsApp Otomatis</span>
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-check text-accent-400"></i> Multi Staf</span>
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-check text-accent-400"></i> Pembayaran Online</span>
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-check text-accent-400"></i> Laporan Real-time</span>
+          </div>
+        </div>
+        <div class="hidden lg:block">
+          <div class="bg-white/10 backdrop-blur-xl rounded-3xl p-5 border border-white/20 shadow-2xl">
+            <div class="bg-white rounded-2xl p-5 text-slate-800">
+              <div class="flex items-center justify-between mb-5">
+                <div>
+                  <div class="text-xs text-slate-400 font-medium">Hari Ini</div>
+                  <div class="font-bold text-lg">18 Booking</div>
+                </div>
+                <div class="flex -space-x-2">
+                  <div class="w-8 h-8 rounded-full bg-primary-500 text-white text-xs font-bold flex items-center justify-center border-2 border-white">R</div>
+                  <div class="w-8 h-8 rounded-full bg-accent-500 text-white text-xs font-bold flex items-center justify-center border-2 border-white">A</div>
+                  <div class="w-8 h-8 rounded-full bg-violet-500 text-white text-xs font-bold flex items-center justify-center border-2 border-white">D</div>
+                  <div class="w-8 h-8 rounded-full bg-slate-300 text-slate-600 text-xs font-bold flex items-center justify-center border-2 border-white">+5</div>
+                </div>
+              </div>
+              <div class="space-y-2.5">
+                <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl">
+                  <div class="w-10 h-10 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center font-bold text-sm">R</div>
+                  <div class="flex-1 min-w-0">
+                    <div class="font-semibold text-sm truncate">Rina â€” Potong Rambut</div>
+                    <div class="text-xs text-slate-500">09:00 â€¢ Budi</div>
+                  </div>
+                  <span class="text-[10px] font-semibold bg-green-100 text-green-700 px-2 py-0.5 rounded-full">OK</span>
+                </div>
+                <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl">
+                  <div class="w-10 h-10 bg-cyan-100 text-cyan-600 rounded-full flex items-center justify-center font-bold text-sm">A</div>
+                  <div class="flex-1 min-w-0">
+                    <div class="font-semibold text-sm truncate">Andi â€” Facial</div>
+                    <div class="text-xs text-slate-500">10:30 â€¢ Sari</div>
+                  </div>
+                  <span class="text-[10px] font-semibold bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">Pending</span>
+                </div>
+                <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl">
+                  <div class="w-10 h-10 bg-violet-100 text-violet-600 rounded-full flex items-center justify-center font-bold text-sm">D</div>
+                  <div class="flex-1 min-w-0">
+                    <div class="font-semibold text-sm truncate">Dewi â€” Manicure</div>
+                    <div class="text-xs text-slate-500">13:00 â€¢ Lina</div>
+                  </div>
+                  <span class="text-[10px] font-semibold bg-green-100 text-green-700 px-2 py-0.5 rounded-full">OK</span>
+                </div>
+              </div>
+              <div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
+                <span class="text-slate-500">Pendapatan hari ini</span>
+                <span class="font-bold text-primary-700">Rp 2.450.000</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="bg-white border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div><div class="text-3xl md:text-4xl font-extrabold text-primary-600">24/7</div><div class="text-sm text-slate-500 mt-1">Booking Online</div></div>
+        <div><div class="text-3xl md:text-4xl font-extrabold text-primary-600">-40%</div><div class="text-sm text-slate-500 mt-1">No-Show Rate</div></div>
+        <div><div class="text-3xl md:text-4xl font-extrabold text-primary-600">Multi</div><div class="text-sm text-slate-500 mt-1">Staf & Cabang</div></div>
+        <div><div class="text-3xl md:text-4xl font-extrabold text-primary-600">Real-time</div><div class="text-sm text-slate-500 mt-1">Laporan & Notifikasi</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Apa ini? Penjelasan untuk awam -->
+  <section class="py-16 bg-slate-50">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-8 md:p-10 shadow-sm">
+        <div class="text-center mb-6">
+          <div class="inline-block text-xs font-bold tracking-wider text-primary-600 bg-primary-50 px-3 py-1 rounded-full mb-3">PENJELASAN SINGKAT</div>
+          <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900">BookEase Pro itu apa?</h2>
+        </div>
+        <div class="space-y-4 text-slate-600 leading-relaxed">
+          <p>
+            <strong class="text-slate-800">BookEase Pro adalah sistem booking online.</strong>
+            Mirip seperti cara pesan tiket atau pesan meja di restoran, tapi untuk bisnis jasa Anda.
+          </p>
+          <p>
+            Contoh: kalau Anda punya <strong>salon, klinik, studio, rental, atau gym</strong>,
+            pelanggan biasanya telepon atau chat dulu untuk tanya jadwal kosong.
+            Itu ribet, sering bentrok, dan mudah lupa.
+          </p>
+          <p>
+            Dengan sistem ini, pelanggan tinggal buka link â†’ pilih layanan â†’ pilih jam â†’ selesai.
+            Anda dapat notifikasi, jadwal rapi, dan pelanggan dapat pengingat otomatis.
+          </p>
+          <div class="bg-primary-50 border border-primary-100 rounded-xl p-4 text-sm">
+            <strong class="text-primary-800">Ini adalah demo / contoh.</strong>
+            Dibuat oleh <a href="https://karyabit-studio.vercel.app" class="text-primary-600 underline" target="_blank">KaryaBit Studio</a>
+            sebagai contoh sistem booking yang bisa dibuatkan untuk bisnis Anda.
+            Bukan aplikasi yang dijual langsung, tapi <strong>contoh hasil kerja</strong> yang bisa disesuaikan.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Fitur -->
+  <section id="fitur" class="py-20 md:py-24">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-14">
+        <div class="inline-block text-xs font-bold tracking-wider text-primary-600 bg-primary-50 px-3 py-1 rounded-full mb-4">FITUR LENGKAP</div>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">Semua yang Dibutuhkan Bisnis Jasa</h2>
+        <p class="text-slate-600 max-w-2xl mx-auto">Dari booking pelanggan sampai laporan â€” satu sistem menangani semuanya.</p>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 card-hover">
+          <div class="feature-icon w-12 h-12 bg-primary-100 text-primary-600 rounded-xl flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-calendar-days"></i></div>
+          <h3 class="font-bold text-lg mb-2">Booking Online 24 Jam</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">Pelanggan pilih layanan, staf, tanggal & jam secara real-time. Tidak ada double booking.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 card-hover">
+          <div class="feature-icon w-12 h-12 bg-green-100 text-green-600 rounded-xl flex items-center justify-center text-xl mb-4"><i class="fa-brands fa-whatsapp"></i></div>
+          <h3 class="font-bold text-lg mb-2">Notifikasi WhatsApp</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">Konfirmasi, reminder H-1, dan notifikasi status otomatis ke pelanggan & admin.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 card-hover">
+          <div class="feature-icon w-12 h-12 bg-violet-100 text-violet-600 rounded-xl flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-users"></i></div>
+          <h3 class="font-bold text-lg mb-2">Manajemen Multi Staf</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">Atur jam kerja, hari libur, cuti, dan kapasitas tiap staf. Pelanggan bisa pilih staf favorit.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 card-hover">
+          <div class="feature-icon w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-clock"></i></div>
+          <h3 class="font-bold text-lg mb-2">Slot Waktu Cerdas</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">Otomatis hitung ketersediaan berdasarkan durasi layanan + jadwal staf yang tersedia.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 card-hover">
+          <div class="feature-icon w-12 h-12 bg-rose-100 text-rose-600 rounded-xl flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-credit-card"></i></div>
+          <h3 class="font-bold text-lg mb-2">Pembayaran Online</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">Terima DP atau lunas via Midtrans: QRIS, Transfer Bank, E-Wallet, Kartu Kredit.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 card-hover">
+          <div class="feature-icon w-12 h-12 bg-cyan-100 text-cyan-600 rounded-xl flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-chart-line"></i></div>
+          <h3 class="font-bold text-lg mb-2">Dashboard & Laporan</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">Pantau booking, pendapatan, performa staf, dan layanan terlaris secara real-time.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 card-hover">
+          <div class="feature-icon w-12 h-12 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-mobile-screen-button"></i></div>
+          <h3 class="font-bold text-lg mb-2">Fully Responsive</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">Tampilan sempurna di HP, tablet, dan desktop. Admin & pelanggan nyaman di mana saja.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 card-hover">
+          <div class="feature-icon w-12 h-12 bg-teal-100 text-teal-600 rounded-xl flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-layer-group"></i></div>
+          <h3 class="font-bold text-lg mb-2">Panel Admin</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">Kelola booking, staf, layanan, dan laporan melalui satu panel admin yang modern dan mudah digunakan.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 card-hover">
+          <div class="feature-icon w-12 h-12 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-building"></i></div>
+          <h3 class="font-bold text-lg mb-2">Multi Cabang</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">Kelola beberapa outlet dalam satu sistem. Laporan terpisah atau digabung.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 card-hover">
+          <div class="feature-icon w-12 h-12 bg-pink-100 text-pink-600 rounded-xl flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-bell"></i></div>
+          <h3 class="font-bold text-lg mb-2">Reminder Otomatis</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">Kirim pengingat otomatis H-1 atau beberapa jam sebelum janji temu.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 card-hover">
+          <div class="feature-icon w-12 h-12 bg-sky-100 text-sky-600 rounded-xl flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-ban"></i></div>
+          <h3 class="font-bold text-lg mb-2">Cuti & Hari Libur</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">Blok tanggal libur nasional atau cuti staf. Slot otomatis tidak tersedia.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 card-hover">
+          <div class="feature-icon w-12 h-12 bg-lime-100 text-lime-600 rounded-xl flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-gear"></i></div>
+          <h3 class="font-bold text-lg mb-2">Custom & Fleksibel</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">Bisa ditambah membership, paket, deposit, atau integrasi sistem lain sesuai kebutuhan.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cara Kerja -->
+  <section id="cara-kerja" class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-14">
+        <div class="inline-block text-xs font-bold tracking-wider text-primary-600 bg-primary-50 px-3 py-1 rounded-full mb-4">ALUR SISTEM</div>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">Cara Kerja BookEase Pro</h2>
+        <p class="text-slate-600 max-w-2xl mx-auto">Dari booking pelanggan sampai laporan admin â€” semuanya otomatis.</p>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="text-center p-6">
+          <div class="w-14 h-14 bg-primary-600 text-white rounded-2xl flex items-center justify-center text-xl font-bold mx-auto mb-4 shadow-lg shadow-primary-600/30">1</div>
+          <h3 class="font-bold mb-2">Pelanggan Booking</h3>
+          <p class="text-sm text-slate-600 leading-relaxed">Pilih layanan â†’ staf â†’ tanggal & jam â†’ isi data â†’ konfirmasi.</p>
+        </div>
+        <div class="text-center p-6">
+          <div class="w-14 h-14 bg-primary-600 text-white rounded-2xl flex items-center justify-center text-xl font-bold mx-auto mb-4 shadow-lg shadow-primary-600/30">2</div>
+          <h3 class="font-bold mb-2">Notifikasi Otomatis</h3>
+          <p class="text-sm text-slate-600 leading-relaxed">Pelanggan & admin langsung dapat konfirmasi via WhatsApp / Email.</p>
+        </div>
+        <div class="text-center p-6">
+          <div class="w-14 h-14 bg-primary-600 text-white rounded-2xl flex items-center justify-center text-xl font-bold mx-auto mb-4 shadow-lg shadow-primary-600/30">3</div>
+          <h3 class="font-bold mb-2">Kelola di Admin</h3>
+          <p class="text-sm text-slate-600 leading-relaxed">Lihat, ubah status, reschedule, atau batalkan dari panel admin.</p>
+        </div>
+        <div class="text-center p-6">
+          <div class="w-14 h-14 bg-primary-600 text-white rounded-2xl flex items-center justify-center text-xl font-bold mx-auto mb-4 shadow-lg shadow-primary-600/30">4</div>
+          <h3 class="font-bold mb-2">Laporan & Analisis</h3>
+          <p class="text-sm text-slate-600 leading-relaxed">Pantau performa harian, mingguan, dan bulanan secara real-time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cocok Untuk -->
+  <section id="bisnis" class="py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-3">Cocok Untuk Berbagai Bisnis</h2>
+        <p class="text-slate-600">Satu sistem, banyak jenis usaha.</p>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        <div class="bg-white rounded-2xl p-5 text-center border border-slate-200 hover:border-primary-300 hover:shadow-md transition"><i class="fa-solid fa-scissors text-2xl text-primary-600 mb-3"></i><div class="text-sm font-semibold">Salon & Barbershop</div></div>
+        <div class="bg-white rounded-2xl p-5 text-center border border-slate-200 hover:border-primary-300 hover:shadow-md transition"><i class="fa-solid fa-stethoscope text-2xl text-primary-600 mb-3"></i><div class="text-sm font-semibold">Klinik & Dokter</div></div>
+        <div class="bg-white rounded-2xl p-5 text-center border border-slate-200 hover:border-primary-300 hover:shadow-md transition"><i class="fa-solid fa-camera text-2xl text-primary-600 mb-3"></i><div class="text-sm font-semibold">Studio Foto</div></div>
+        <div class="bg-white rounded-2xl p-5 text-center border border-slate-200 hover:border-primary-300 hover:shadow-md transition"><i class="fa-solid fa-car text-2xl text-primary-600 mb-3"></i><div class="text-sm font-semibold">Rental Mobil/Alat</div></div>
+        <div class="bg-white rounded-2xl p-5 text-center border border-slate-200 hover:border-primary-300 hover:shadow-md transition"><i class="fa-solid fa-dumbbell text-2xl text-primary-600 mb-3"></i><div class="text-sm font-semibold">Gym & Fitness</div></div>
+        <div class="bg-white rounded-2xl p-5 text-center border border-slate-200 hover:border-primary-300 hover:shadow-md transition"><i class="fa-solid fa-spa text-2xl text-primary-600 mb-3"></i><div class="text-sm font-semibold">Spa & Wellness</div></div>
+        <div class="bg-white rounded-2xl p-5 text-center border border-slate-200 hover:border-primary-300 hover:shadow-md transition"><i class="fa-solid fa-tooth text-2xl text-primary-600 mb-3"></i><div class="text-sm font-semibold">Klinik Gigi</div></div>
+        <div class="bg-white rounded-2xl p-5 text-center border border-slate-200 hover:border-primary-300 hover:shadow-md transition"><i class="fa-solid fa-paw text-2xl text-primary-600 mb-3"></i><div class="text-sm font-semibold">Pet Grooming</div></div>
+        <div class="bg-white rounded-2xl p-5 text-center border border-slate-200 hover:border-primary-300 hover:shadow-md transition"><i class="fa-solid fa-futbol text-2xl text-primary-600 mb-3"></i><div class="text-sm font-semibold">Lapangan Olahraga</div></div>
+        <div class="bg-white rounded-2xl p-5 text-center border border-slate-200 hover:border-primary-300 hover:shadow-md transition"><i class="fa-solid fa-user-tie text-2xl text-primary-600 mb-3"></i><div class="text-sm font-semibold">Konsultan</div></div>
+        <div class="bg-white rounded-2xl p-5 text-center border border-slate-200 hover:border-primary-300 hover:shadow-md transition"><i class="fa-solid fa-paintbrush text-2xl text-primary-600 mb-3"></i><div class="text-sm font-semibold">Makeup Artist</div></div>
+        <div class="bg-white rounded-2xl p-5 text-center border border-slate-200 hover:border-primary-300 hover:shadow-md transition"><i class="fa-solid fa-house-chimney text-2xl text-primary-600 mb-3"></i><div class="text-sm font-semibold">Homestay / Villa</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="bg-gradient-to-br from-primary-700 via-primary-600 to-accent-600 rounded-3xl p-10 md:p-16 text-white text-center relative overflow-hidden">
+        <div class="relative">
+          <h2 class="text-3xl md:text-4xl font-extrabold mb-4">Coba Langsung Sistemnya</h2>
+          <p class="text-blue-100 max-w-xl mx-auto mb-8 text-lg">Rasakan pengalaman booking dari sisi pelanggan dan kelola dari sisi admin.</p>
+          <div class="flex flex-wrap justify-center gap-4">
+            <a href="booking.html" class="inline-flex items-center gap-2 bg-white text-primary-800 font-bold px-8 py-4 rounded-xl hover:bg-blue-50 transition shadow-xl"><i class="fa-solid fa-play"></i> Demo Booking</a>
+            <a href="admin.html" class="inline-flex items-center gap-2 bg-white/15 backdrop-blur border border-white/30 font-semibold px-8 py-4 rounded-xl hover:bg-white/25 transition"><i class="fa-solid fa-gauge-high"></i> Demo Admin</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Harga -->
+  <section id="harga" class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-14">
+        <div class="inline-block text-xs font-bold tracking-wider text-primary-600 bg-primary-50 px-3 py-1 rounded-full mb-4">HARGA</div>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">Harga Terjangkau untuk UMKM</h2>
+        <p class="text-slate-600 max-w-xl mx-auto">Sekali bayar, sistem langsung bisa dipakai. Tidak ada biaya bulanan wajib.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div class="bg-slate-50 rounded-2xl border border-slate-200 p-7 flex flex-col">
+          <div class="text-sm font-semibold text-slate-500 mb-1">Basic</div>
+          <div class="text-3xl font-extrabold mb-1">Rp 1,5jt</div>
+          <div class="text-sm text-slate-500 mb-6">sekali bayar</div>
+          <ul class="space-y-3 text-sm flex-1 mb-8">
+            <li class="flex gap-2"><i class="fa-solid fa-check text-green-500 mt-0.5"></i> Pelanggan bisa booking online</li>
+            <li class="flex gap-2"><i class="fa-solid fa-check text-green-500 mt-0.5"></i> Panel admin untuk kelola jadwal</li>
+            <li class="flex gap-2"><i class="fa-solid fa-check text-green-500 mt-0.5"></i> Atur layanan & staf</li>
+            <li class="flex gap-2"><i class="fa-solid fa-check text-green-500 mt-0.5"></i> Notifikasi Email</li>
+            <li class="flex gap-2"><i class="fa-solid fa-check text-green-500 mt-0.5"></i> Bantuan 14 hari</li>
+          </ul>
+          <a href="#kontak" class="block text-center border-2 border-primary-600 text-primary-600 font-semibold py-3 rounded-xl hover:bg-primary-50 transition">Pilih Basic</a>
+        </div>
+        <div class="bg-white rounded-2xl border-2 border-primary-600 p-7 flex flex-col relative shadow-xl shadow-primary-600/10 scale-[1.02]">
+          <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-primary-600 text-white text-xs font-bold px-4 py-1 rounded-full">PALING LARIS</div>
+          <div class="text-sm font-semibold text-primary-600 mb-1">Standard</div>
+          <div class="text-3xl font-extrabold mb-1">Rp 2,5jt</div>
+          <div class="text-sm text-slate-500 mb-6">sekali bayar</div>
+          <ul class="space-y-3 text-sm flex-1 mb-8">
+            <li class="flex gap-2"><i class="fa-solid fa-check text-green-500 mt-0.5"></i> Semua fitur Basic</li>
+            <li class="flex gap-2"><i class="fa-solid fa-check text-green-500 mt-0.5"></i> Notifikasi WhatsApp otomatis</li>
+            <li class="flex gap-2"><i class="fa-solid fa-check text-green-500 mt-0.5"></i> Pengingat sebelum jadwal</li>
+            <li class="flex gap-2"><i class="fa-solid fa-check text-green-500 mt-0.5"></i> Laporan sederhana</li>
+            <li class="flex gap-2"><i class="fa-solid fa-check text-green-500 mt-0.5"></i> Bantuan 30 hari</li>
+          </ul>
+          <a href="#kontak" class="block text-center bg-primary-600 text-white font-semibold py-3 rounded-xl hover:bg-primary-700 transition">Pilih Standard</a>
+        </div>
+        <div class="bg-slate-50 rounded-2xl border border-slate-200 p-7 flex flex-col">
+          <div class="text-sm font-semibold text-slate-500 mb-1">Premium</div>
+          <div class="text-3xl font-extrabold mb-1">Rp 4jt</div>
+          <div class="text-sm text-slate-500 mb-6">sekali bayar</div>
+          <ul class="space-y-3 text-sm flex-1 mb-8">
+            <li class="flex gap-2"><i class="fa-solid fa-check text-green-500 mt-0.5"></i> Semua fitur Standard</li>
+            <li class="flex gap-2"><i class="fa-solid fa-check text-green-500 mt-0.5"></i> Bisa bayar online (QRIS, transfer)</li>
+            <li class="flex gap-2"><i class="fa-solid fa-check text-green-500 mt-0.5"></i> Cocok untuk beberapa cabang</li>
+            <li class="flex gap-2"><i class="fa-solid fa-check text-green-500 mt-0.5"></i> Bisa disesuaikan kebutuhan</li>
+            <li class="flex gap-2"><i class="fa-solid fa-check text-green-500 mt-0.5"></i> Bantuan 60 hari + diajari pakai</li>
+          </ul>
+          <a href="#kontak" class="block text-center border-2 border-primary-600 text-primary-600 font-semibold py-3 rounded-xl hover:bg-primary-50 transition">Pilih Premium</a>
+        </div>
+      </div>
+      <p class="text-center text-sm text-slate-500 mt-8">Harga di atas untuk contoh. Harga final menyesuaikan kebutuhan bisnis Anda.</p>
+    </div>
+  </section>
+
+  <!-- Kontak -->
+  <section id="kontak" class="py-20 bg-slate-900 text-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+      <h2 class="text-3xl md:text-4xl font-extrabold mb-4">Siap Naikkan Level Bisnis Anda?</h2>
+      <p class="text-slate-400 mb-8 text-lg">Konsultasi gratis. Ceritakan kebutuhan booking sistem untuk bisnis Anda.</p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="https://karyabit-studio.vercel.app" target="_blank" class="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-500 font-semibold px-7 py-3.5 rounded-xl transition"><i class="fa-solid fa-globe"></i> KaryaBit Studio</a>
+        <a href="https://wa.me/6281234567890" target="_blank" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-500 font-semibold px-7 py-3.5 rounded-xl transition"><i class="fa-brands fa-whatsapp"></i> Chat WhatsApp</a>
+      </div>
+      <p class="text-slate-500 text-sm mt-10">Ini adalah demo/contoh sistem booking. Dibuat oleh KaryaBit Studio sebagai portfolio â€” bisa dibuatkan yang mirip untuk bisnis Anda.</p>
+    </div>
+  </section>
+
+  <footer class="bg-slate-950 text-slate-500 py-6 text-center text-sm">
+    Â© 2026 BookEase Pro â€” Portfolio by <a href="https://karyabit-studio.vercel.app" class="text-primary-400 hover:underline">KaryaBit Studio</a>
+  </footer>
+
+  <script>
+    document.getElementById('menu-btn').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+  </script>
+</body>
+</html>
+

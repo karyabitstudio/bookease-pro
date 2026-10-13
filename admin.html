@@ -1,0 +1,599 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard â€” BookEase Pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: { 50:'#eff6ff',100:'#dbeafe',500:'#3b82f6',600:'#2563eb',700:'#1d4ed8',900:'#1e3a8a' }
+          },
+          fontFamily: { sans: ['Inter','system-ui','sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>body { font-family: 'Inter', system-ui, sans-serif; } .nav-item.active { background: #2563eb; color: white; }</style>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="w-64 bg-slate-900 text-white flex-col hidden md:flex fixed md:relative inset-y-0 left-0 z-50">
+      <div class="p-5 border-b border-slate-700">
+        <div class="font-bold text-lg flex items-center gap-2">
+          <i class="fa-solid fa-calendar-check text-primary-500"></i>
+          BookEase <span class="text-cyan-400">Pro</span>
+        </div>
+        <div class="text-xs text-slate-400 mt-1">Admin Panel Demo</div>
+      </div>
+      <nav class="flex-1 p-3 space-y-0.5 text-sm overflow-y-auto">
+        <button onclick="showPage('dashboard')" class="nav-item active w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left" data-page="dashboard">
+          <i class="fa-solid fa-gauge w-5 text-center"></i> Dashboard
+        </button>
+        <button onclick="showPage('bookings')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 text-left" data-page="bookings">
+          <i class="fa-solid fa-calendar-days w-5 text-center"></i> Booking
+        </button>
+        <button onclick="showPage('services')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 text-left" data-page="services">
+          <i class="fa-solid fa-scissors w-5 text-center"></i> Layanan
+        </button>
+        <button onclick="showPage('staff')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 text-left" data-page="staff">
+          <i class="fa-solid fa-users w-5 text-center"></i> Staf
+        </button>
+        <button onclick="showPage('reports')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 text-left" data-page="reports">
+          <i class="fa-solid fa-chart-bar w-5 text-center"></i> Laporan
+        </button>
+        <button onclick="showPage('settings')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 text-left" data-page="settings">
+          <i class="fa-solid fa-gear w-5 text-center"></i> Pengaturan
+        </button>
+      </nav>
+      <div class="p-4 border-t border-slate-700 space-y-2">
+        <a href="booking.html" class="flex items-center gap-2 text-sm text-slate-400 hover:text-white">
+          <i class="fa-solid fa-external-link text-xs"></i> Halaman Booking
+        </a>
+        <a href="cek-booking.html" class="flex items-center gap-2 text-sm text-slate-400 hover:text-white">
+          <i class="fa-solid fa-magnifying-glass text-xs"></i> Cek Status Booking
+        </a>
+        <a href="booking-saya.html" class="flex items-center gap-2 text-sm text-slate-400 hover:text-white">
+          <i class="fa-solid fa-user text-xs"></i> Booking Saya
+        </a>
+        <a href="index.html" class="flex items-center gap-2 text-sm text-slate-400 hover:text-white">
+          <i class="fa-solid fa-arrow-left"></i> Kembali ke Website
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="flex-1 min-w-0">
+      <header class="bg-white border-b border-slate-200 px-4 sm:px-6 py-3.5 flex items-center justify-between sticky top-0 z-30">
+        <div class="flex items-center gap-3">
+          <button onclick="document.getElementById('sidebar').classList.toggle('hidden'); document.getElementById('sidebar').classList.toggle('flex');" class="md:hidden w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-100">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div>
+            <h1 id="page-title" class="text-lg font-bold">Dashboard</h1>
+            <p id="page-subtitle" class="text-xs text-slate-500">Ringkasan hari ini</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="text-sm text-slate-500 hidden sm:inline">Admin Demo</span>
+          <div class="w-9 h-9 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold text-sm">A</div>
+        </div>
+      </header>
+
+      <div class="p-4 sm:p-6">
+
+        <!-- ================= DASHBOARD ================= -->
+        <div id="page-dashboard">
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white rounded-xl border border-slate-200 p-5">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-sm text-slate-500">Booking Hari Ini</span>
+                <div class="w-9 h-9 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center"><i class="fa-solid fa-calendar-check"></i></div>
+              </div>
+              <div class="text-2xl font-extrabold">18</div>
+              <div class="text-xs text-green-600 mt-1"><i class="fa-solid fa-arrow-up"></i> +12% dari kemarin</div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 p-5">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-sm text-slate-500">Pendapatan</span>
+                <div class="w-9 h-9 bg-green-100 text-green-600 rounded-lg flex items-center justify-center"><i class="fa-solid fa-money-bill-wave"></i></div>
+              </div>
+              <div class="text-2xl font-extrabold">Rp 2,4jt</div>
+              <div class="text-xs text-green-600 mt-1"><i class="fa-solid fa-arrow-up"></i> +8%</div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 p-5">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-sm text-slate-500">Menunggu</span>
+                <div class="w-9 h-9 bg-amber-100 text-amber-600 rounded-lg flex items-center justify-center"><i class="fa-solid fa-clock"></i></div>
+              </div>
+              <div class="text-2xl font-extrabold">5</div>
+              <div class="text-xs text-slate-500 mt-1">Perlu konfirmasi</div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 p-5">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-sm text-slate-500">Staf Aktif</span>
+                <div class="w-9 h-9 bg-violet-100 text-violet-600 rounded-lg flex items-center justify-center"><i class="fa-solid fa-users"></i></div>
+              </div>
+              <div class="text-2xl font-extrabold">4 / 5</div>
+              <div class="text-xs text-slate-500 mt-1">1 cuti</div>
+            </div>
+          </div>
+
+          <div class="grid lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 bg-white rounded-xl border border-slate-200 overflow-hidden">
+              <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between">
+                <h2 class="font-bold">Booking Hari Ini</h2>
+                <button onclick="showPage('bookings')" class="text-xs text-primary-600 font-medium hover:underline">Lihat Semua</button>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                  <thead class="bg-slate-50 text-slate-500">
+                    <tr>
+                      <th class="text-left px-4 py-3 font-medium">Pelanggan</th>
+                      <th class="text-left px-4 py-3 font-medium">Layanan</th>
+                      <th class="text-left px-4 py-3 font-medium">Jam</th>
+                      <th class="text-left px-4 py-3 font-medium">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100" id="dash-bookings"></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 p-5">
+              <h2 class="font-bold mb-4">Layanan Terlaris</h2>
+              <div class="space-y-3" id="top-services"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= BOOKINGS ================= -->
+        <div id="page-bookings" class="hidden">
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+            <div class="flex gap-2">
+              <button class="filter-btn active px-3 py-1.5 text-sm rounded-lg bg-primary-600 text-white" data-filter="all">Semua</button>
+              <button class="filter-btn px-3 py-1.5 text-sm rounded-lg bg-white border border-slate-200" data-filter="pending">Pending</button>
+              <button class="filter-btn px-3 py-1.5 text-sm rounded-lg bg-white border border-slate-200" data-filter="confirmed">Confirmed</button>
+              <button class="filter-btn px-3 py-1.5 text-sm rounded-lg bg-white border border-slate-200" data-filter="done">Selesai</button>
+            </div>
+            <div class="text-sm text-slate-500"><span id="booking-count">12</span> booking</div>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead class="bg-slate-50 text-slate-500">
+                  <tr>
+                    <th class="text-left px-4 py-3 font-medium">Kode</th>
+                    <th class="text-left px-4 py-3 font-medium">Pelanggan</th>
+                    <th class="text-left px-4 py-3 font-medium">Layanan</th>
+                    <th class="text-left px-4 py-3 font-medium">Staf</th>
+                    <th class="text-left px-4 py-3 font-medium">Tanggal</th>
+                    <th class="text-left px-4 py-3 font-medium">Jam</th>
+                    <th class="text-left px-4 py-3 font-medium">Status</th>
+                    <th class="text-left px-4 py-3 font-medium">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100" id="bookings-table"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= SERVICES ================= -->
+        <div id="page-services" class="hidden">
+          <div class="flex justify-between items-center mb-5">
+            <p class="text-sm text-slate-500">Kelola daftar layanan yang bisa dibooking</p>
+            <button class="bg-primary-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-primary-700"><i class="fa-solid fa-plus mr-1"></i> Tambah Layanan</button>
+          </div>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4" id="services-grid"></div>
+        </div>
+
+        <!-- ================= STAFF ================= -->
+        <div id="page-staff" class="hidden">
+          <div class="flex justify-between items-center mb-5">
+            <p class="text-sm text-slate-500">Kelola staf, jadwal kerja, dan ketersediaan</p>
+            <button class="bg-primary-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-primary-700"><i class="fa-solid fa-plus mr-1"></i> Tambah Staf</button>
+          </div>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4" id="staff-grid"></div>
+        </div>
+
+        <!-- ================= REPORTS ================= -->
+        <div id="page-reports" class="hidden">
+          <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white rounded-xl border border-slate-200 p-5 text-center">
+              <div class="text-sm text-slate-500 mb-1">Total Booking (Bulan Ini)</div>
+              <div class="text-3xl font-extrabold text-primary-600">247</div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 p-5 text-center">
+              <div class="text-sm text-slate-500 mb-1">Pendapatan (Bulan Ini)</div>
+              <div class="text-3xl font-extrabold text-green-600">Rp 38,2jt</div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 p-5 text-center">
+              <div class="text-sm text-slate-500 mb-1">Rata-rata / Hari</div>
+              <div class="text-3xl font-extrabold">12,3</div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 p-5 text-center">
+              <div class="text-sm text-slate-500 mb-1">Tingkat No-Show</div>
+              <div class="text-3xl font-extrabold text-amber-600">6,2%</div>
+            </div>
+          </div>
+          <div class="grid lg:grid-cols-2 gap-6">
+            <div class="bg-white rounded-xl border border-slate-200 p-5">
+              <h3 class="font-bold mb-4">Performa Staf (Bulan Ini)</h3>
+              <div class="space-y-3" id="staff-performance"></div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 p-5">
+              <h3 class="font-bold mb-4">Layanan Terlaris (Bulan Ini)</h3>
+              <div class="space-y-3" id="service-performance"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= SETTINGS ================= -->
+        <div id="page-settings" class="hidden">
+          <div class="max-w-2xl space-y-6">
+            <div class="bg-white rounded-xl border border-slate-200 p-6">
+              <h3 class="font-bold mb-4">Informasi Bisnis</h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium mb-1">Nama Bisnis</label>
+                  <input type="text" value="Salon Cantik Sejahtera" class="w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium mb-1">Alamat</label>
+                  <input type="text" value="Jl. Merdeka No. 45, Jakarta Selatan" class="w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium mb-1">Jam Buka</label>
+                    <input type="time" value="09:00" class="w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium mb-1">Jam Tutup</label>
+                    <input type="time" value="18:00" class="w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 p-6">
+              <h3 class="font-bold mb-4">Notifikasi</h3>
+              <div class="space-y-3">
+                <label class="flex items-center justify-between">
+                  <span class="text-sm">WhatsApp Konfirmasi Booking</span>
+                  <input type="checkbox" checked class="w-4 h-4 text-primary-600 rounded" />
+                </label>
+                <label class="flex items-center justify-between">
+                  <span class="text-sm">Reminder H-1 via WhatsApp</span>
+                  <input type="checkbox" checked class="w-4 h-4 text-primary-600 rounded" />
+                </label>
+                <label class="flex items-center justify-between">
+                  <span class="text-sm">Email Notifikasi Admin</span>
+                  <input type="checkbox" checked class="w-4 h-4 text-primary-600 rounded" />
+                </label>
+                <label class="flex items-center justify-between">
+                  <span class="text-sm">Notifikasi Status Berubah</span>
+                  <input type="checkbox" class="w-4 h-4 text-primary-600 rounded" />
+                </label>
+              </div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 p-6">
+              <h3 class="font-bold mb-4">Pembayaran</h3>
+              <div class="space-y-3">
+                <label class="flex items-center justify-between">
+                  <span class="text-sm">Bayar di Tempat</span>
+                  <input type="checkbox" checked class="w-4 h-4 text-primary-600 rounded" />
+                </label>
+                <label class="flex items-center justify-between">
+                  <span class="text-sm">Pembayaran Online (Midtrans)</span>
+                  <input type="checkbox" class="w-4 h-4 text-primary-600 rounded" />
+                </label>
+                <label class="flex items-center justify-between">
+                  <span class="text-sm">Wajib DP Minimal 30%</span>
+                  <input type="checkbox" class="w-4 h-4 text-primary-600 rounded" />
+                </label>
+              </div>
+            </div>
+            <button class="bg-primary-600 text-white font-semibold px-6 py-2.5 rounded-lg hover:bg-primary-700">Simpan Pengaturan</button>
+          </div>
+        </div>
+
+        <p class="text-center text-xs text-slate-400 mt-10">Demo Admin Panel â€” Versi production menggunakan Laravel + Filament PHP</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal Detail Booking -->
+  <div id="detail-modal" class="hidden fixed inset-0 z-[60] flex items-end sm:items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/40" onclick="closeDetailModal()"></div>
+    <div class="relative bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100 sticky top-0 bg-white z-10">
+        <h3 class="font-bold text-lg">Detail Booking</h3>
+        <button onclick="closeDetailModal()" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 text-slate-500">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div id="detail-modal-content" class="p-5 space-y-4 text-sm"></div>
+      <div id="detail-modal-actions" class="px-5 pb-5 flex flex-wrap gap-2 border-t border-slate-100 pt-4"></div>
+    </div>
+  </div>
+
+  <script>
+    // Data default + dari localStorage (hasil booking demo)
+    const defaultBookings = [
+      { code:'BE-A3F2K9', name:'Rina Wijaya', phone:'081234567890', service:'Potong Rambut', staff:'Budi Santoso', date:'2026-10-13', time:'09:00', status:'confirmed', price:75000 },
+      { code:'BE-B7M1P4', name:'Andi Pratama', phone:'081398765432', service:'Facial Treatment', staff:'Sari Dewi', date:'2026-10-13', time:'10:30', status:'pending', price:150000 },
+      { code:'BE-C2N8Q5', name:'Dewi Lestari', phone:'085711223344', service:'Manicure & Pedicure', staff:'Lina Putri', date:'2026-10-13', time:'13:00', status:'confirmed', price:120000 },
+      { code:'BE-D9K3R1', name:'Fajar Nugroho', phone:'082155667788', service:'Hair Coloring', staff:'Rudi Hermawan', date:'2026-10-13', time:'14:30', status:'confirmed', price:350000 },
+      { code:'BE-E5T7W2', name:'Sinta Amelia', phone:'089933445566', service:'Konsultasi Skin', staff:'Sari Dewi', date:'2026-10-13', time:'16:00', status:'pending', price:50000 },
+      { code:'BE-F1H8J3', name:'Budi Hartono', phone:'081577889900', service:'Creambath', staff:'Budi Santoso', date:'2026-10-14', time:'09:30', status:'confirmed', price:100000 },
+      { code:'BE-G4K2L7', name:'Maya Sari', phone:'087822334455', service:'Facial Treatment', staff:'Sari Dewi', date:'2026-10-14', time:'11:00', status:'pending', price:150000 },
+      { code:'BE-H6N9P1', name:'Rizki Firmansyah', phone:'081266778899', service:'Potong Rambut', staff:'Budi Santoso', date:'2026-10-14', time:'15:00', status:'done', price:75000 },
+    ];
+    function getBookings() {
+      const stored = JSON.parse(localStorage.getItem('bookease_bookings') || '[]');
+      const codes = new Set(stored.map(b => b.code));
+      const merged = [...stored];
+      defaultBookings.forEach(b => { if (!codes.has(b.code)) merged.push(b); });
+      return merged;
+    }
+    let bookings = getBookings();
+    let currentFilter = 'all';
+    function formatDateShort(d) {
+      if (!d) return '-';
+      try { return new Date(d+'T00:00:00').toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}); }
+      catch { return d; }
+    }
+    function updateBookingStatus(code, newStatus) {
+      let stored = JSON.parse(localStorage.getItem('bookease_bookings') || '[]');
+      const idx = stored.findIndex(b => b.code === code);
+      if (idx >= 0) { stored[idx].status = newStatus; localStorage.setItem('bookease_bookings', JSON.stringify(stored)); }
+      const b = bookings.find(x => x.code === code);
+      if (b) b.status = newStatus;
+      renderBookings(currentFilter);
+      renderDashBookings();
+    }
+
+    const services = [
+      { name:'Potong Rambut', duration:45, price:75000, bookings:48, active:true },
+      { name:'Facial Treatment', duration:60, price:150000, bookings:36, active:true },
+      { name:'Manicure & Pedicure', duration:90, price:120000, bookings:29, active:true },
+      { name:'Hair Coloring', duration:120, price:350000, bookings:18, active:true },
+      { name:'Konsultasi Skin', duration:30, price:50000, bookings:22, active:true },
+      { name:'Creambath', duration:60, price:100000, bookings:15, active:true },
+    ];
+
+    const staffData = [
+      { name:'Budi Santoso', role:'Senior Stylist', bookings:62, status:'active', schedule:'Senâ€“Sab 09:00â€“18:00' },
+      { name:'Sari Dewi', role:'Beautician', bookings:54, status:'active', schedule:'Senâ€“Jum 09:00â€“17:00' },
+      { name:'Lina Putri', role:'Nail Artist', bookings:41, status:'active', schedule:'Selâ€“Sab 10:00â€“18:00' },
+      { name:'Rudi Hermawan', role:'Hair Colorist', bookings:33, status:'active', schedule:'Senâ€“Sab 09:00â€“18:00' },
+      { name:'Nina Kusuma', role:'Junior Stylist', bookings:0, status:'cuti', schedule:'Cuti 10â€“20 Okt' },
+    ];
+
+    const statusBadge = {
+      pending: 'bg-amber-100 text-amber-700',
+      confirmed: 'bg-green-100 text-green-700',
+      done: 'bg-slate-100 text-slate-600',
+      cancelled: 'bg-red-100 text-red-700'
+    };
+    const statusLabel = { pending:'Pending', confirmed:'Confirmed', done:'Selesai', cancelled:'Batal' };
+
+    // Render functions
+    function renderDashBookings() {
+      bookings = getBookings();
+      document.getElementById('dash-bookings').innerHTML = bookings.slice(0,5).map(b => `
+        <tr class="hover:bg-slate-50">
+          <td class="px-4 py-3"><div class="font-medium">${b.name}</div><div class="text-xs text-slate-500">${b.phone}</div></td>
+          <td class="px-4 py-3">${b.service}</td>
+          <td class="px-4 py-3">${b.time}</td>
+          <td class="px-4 py-3"><span class="text-xs font-medium px-2.5 py-1 rounded-full ${statusBadge[b.status]||statusBadge.pending}">${statusLabel[b.status]||b.status}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    function renderTopServices() {
+      const sorted = [...services].sort((a,b) => b.bookings - a.bookings).slice(0,5);
+      const max = sorted[0].bookings;
+      document.getElementById('top-services').innerHTML = sorted.map(s => `
+        <div>
+          <div class="flex justify-between text-sm mb-1"><span>${s.name}</span><span class="font-medium">${s.bookings}</span></div>
+          <div class="h-2 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-primary-500 rounded-full" style="width:${(s.bookings/max)*100}%"></div></div>
+        </div>
+      `).join('');
+    }
+
+    function renderBookings(filter='all') {
+      currentFilter = filter;
+      bookings = getBookings();
+      const filtered = filter === 'all' ? bookings : bookings.filter(b => b.status === filter);
+      document.getElementById('booking-count').textContent = filtered.length;
+      document.getElementById('bookings-table').innerHTML = filtered.map(b => {
+        let actions = `<button onclick="openDetailModal('${b.code}')" class="text-primary-600 hover:text-primary-800 text-xs font-medium mr-2">Detail</button>`;
+        if (b.status === 'pending') {
+          actions += `<button onclick="updateBookingStatus('${b.code}','confirmed')" class="text-green-600 hover:text-green-800 text-xs font-medium mr-1">Konfirmasi</button>
+                      <button onclick="updateBookingStatus('${b.code}','cancelled')" class="text-red-500 hover:text-red-700 text-xs font-medium">Batal</button>`;
+        } else if (b.status === 'confirmed') {
+          actions += `<button onclick="updateBookingStatus('${b.code}','done')" class="text-blue-600 hover:text-blue-800 text-xs font-medium mr-1">Selesai</button>
+                      <button onclick="updateBookingStatus('${b.code}','cancelled')" class="text-red-500 hover:text-red-700 text-xs font-medium">Batal</button>`;
+        }
+        return `<tr class="hover:bg-slate-50">
+          <td class="px-4 py-3 font-mono text-xs">${b.code}</td>
+          <td class="px-4 py-3"><div class="font-medium">${b.name}</div><div class="text-xs text-slate-500">${b.phone}</div></td>
+          <td class="px-4 py-3">${b.service}</td>
+          <td class="px-4 py-3">${b.staff}</td>
+          <td class="px-4 py-3">${formatDateShort(b.date)}</td>
+          <td class="px-4 py-3">${b.time}</td>
+          <td class="px-4 py-3"><span class="text-xs font-medium px-2.5 py-1 rounded-full ${statusBadge[b.status]||statusBadge.pending}">${statusLabel[b.status]||b.status}</span></td>
+          <td class="px-4 py-3 whitespace-nowrap">${actions}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    function openDetailModal(code) {
+      const b = getBookings().find(x => x.code === code);
+      if (!b) return;
+      const formatFull = (d) => {
+        if (!d) return '-';
+        try { return new Date(d+'T00:00:00').toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'}); }
+        catch { return d; }
+      };
+      document.getElementById('detail-modal-content').innerHTML = `
+        <div class="flex items-center justify-between">
+          <span class="font-mono font-bold text-base">${b.code}</span>
+          <span class="text-xs font-semibold px-2.5 py-1 rounded-full ${statusBadge[b.status]||statusBadge.pending}">${statusLabel[b.status]||b.status}</span>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-4 space-y-2.5">
+          <div class="flex justify-between"><span class="text-slate-500">Nama Pelanggan</span><span class="font-medium">${b.name}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">WhatsApp</span><span class="font-medium">${b.phone}</span></div>
+          ${b.email ? `<div class="flex justify-between"><span class="text-slate-500">Email</span><span class="font-medium">${b.email}</span></div>` : ''}
+          <div class="flex justify-between"><span class="text-slate-500">Layanan</span><span class="font-medium">${b.service}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Staf</span><span class="font-medium">${b.staff}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Tanggal</span><span class="font-medium">${formatFull(b.date)}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Jam</span><span class="font-medium">${b.time}</span></div>
+          ${b.duration ? `<div class="flex justify-between"><span class="text-slate-500">Durasi</span><span class="font-medium">${b.duration} menit</span></div>` : ''}
+          <div class="flex justify-between border-t border-slate-200 pt-2.5"><span class="text-slate-500">Harga</span><span class="font-bold text-primary-700">Rp ${(b.price||0).toLocaleString('id-ID')}</span></div>
+          ${b.note ? `<div class="flex justify-between"><span class="text-slate-500">Catatan</span><span class="font-medium">${b.note}</span></div>` : ''}
+          ${b.createdAt ? `<div class="flex justify-between"><span class="text-slate-500">Dibuat</span><span class="font-medium text-xs">${new Date(b.createdAt).toLocaleString('id-ID')}</span></div>` : ''}
+        </div>
+      `;
+      let acts = '';
+      if (b.status === 'pending') {
+        acts = `<button onclick="updateBookingStatus('${b.code}','confirmed');closeDetailModal()" class="flex-1 bg-green-600 text-white py-2.5 rounded-xl text-sm font-medium hover:bg-green-700">Konfirmasi</button>
+                <button onclick="updateBookingStatus('${b.code}','cancelled');closeDetailModal()" class="flex-1 border border-red-200 text-red-600 py-2.5 rounded-xl text-sm font-medium hover:bg-red-50">Batalkan</button>`;
+      } else if (b.status === 'confirmed') {
+        acts = `<button onclick="updateBookingStatus('${b.code}','done');closeDetailModal()" class="flex-1 bg-primary-600 text-white py-2.5 rounded-xl text-sm font-medium hover:bg-primary-700">Tandai Selesai</button>
+                <button onclick="updateBookingStatus('${b.code}','cancelled');closeDetailModal()" class="flex-1 border border-red-200 text-red-600 py-2.5 rounded-xl text-sm font-medium hover:bg-red-50">Batalkan</button>`;
+      } else {
+        acts = `<button onclick="closeDetailModal()" class="flex-1 border border-slate-200 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-50">Tutup</button>`;
+      }
+      document.getElementById('detail-modal-actions').innerHTML = acts;
+      document.getElementById('detail-modal').classList.remove('hidden');
+    }
+
+    function closeDetailModal() {
+      document.getElementById('detail-modal').classList.add('hidden');
+    }
+
+    function renderServices() {
+      document.getElementById('services-grid').innerHTML = services.map(s => `
+        <div class="bg-white rounded-xl border border-slate-200 p-5">
+          <div class="flex items-start justify-between mb-3">
+            <h3 class="font-bold">${s.name}</h3>
+            <span class="text-xs ${s.active ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'} px-2 py-0.5 rounded-full">${s.active ? 'Aktif' : 'Nonaktif'}</span>
+          </div>
+          <div class="text-sm text-slate-500 space-y-1 mb-4">
+            <div><i class="fa-solid fa-clock w-4"></i> ${s.duration} menit</div>
+            <div><i class="fa-solid fa-tag w-4"></i> Rp ${s.price.toLocaleString('id-ID')}</div>
+            <div><i class="fa-solid fa-calendar-check w-4"></i> ${s.bookings} booking bulan ini</div>
+          </div>
+          <div class="flex gap-2">
+            <button class="flex-1 text-xs border border-slate-200 py-1.5 rounded-lg hover:bg-slate-50">Edit</button>
+            <button class="flex-1 text-xs border border-slate-200 py-1.5 rounded-lg hover:bg-slate-50">${s.active ? 'Nonaktifkan' : 'Aktifkan'}</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderStaff() {
+      document.getElementById('staff-grid').innerHTML = staffData.map(s => `
+        <div class="bg-white rounded-xl border border-slate-200 p-5">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-12 h-12 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center font-bold text-lg">${s.name.charAt(0)}</div>
+            <div>
+              <h3 class="font-bold">${s.name}</h3>
+              <div class="text-xs text-slate-500">${s.role}</div>
+            </div>
+          </div>
+          <div class="text-sm text-slate-500 space-y-1 mb-4">
+            <div><i class="fa-solid fa-calendar w-4"></i> ${s.schedule}</div>
+            <div><i class="fa-solid fa-calendar-check w-4"></i> ${s.bookings} booking bulan ini</div>
+            <div><span class="text-xs font-medium px-2 py-0.5 rounded-full ${s.status==='active' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}">${s.status==='active' ? 'Aktif' : 'Cuti'}</span></div>
+          </div>
+          <div class="flex gap-2">
+            <button class="flex-1 text-xs border border-slate-200 py-1.5 rounded-lg hover:bg-slate-50">Edit</button>
+            <button class="flex-1 text-xs border border-slate-200 py-1.5 rounded-lg hover:bg-slate-50">Jadwal</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderReports() {
+      const maxStaff = Math.max(...staffData.filter(s=>s.status==='active').map(s=>s.bookings));
+      document.getElementById('staff-performance').innerHTML = staffData.filter(s=>s.status==='active').sort((a,b)=>b.bookings-a.bookings).map(s => `
+        <div>
+          <div class="flex justify-between text-sm mb-1"><span>${s.name}</span><span class="font-medium">${s.bookings} booking</span></div>
+          <div class="h-2 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-violet-500 rounded-full" style="width:${(s.bookings/maxStaff)*100}%"></div></div>
+        </div>
+      `).join('');
+      const maxSvc = Math.max(...services.map(s=>s.bookings));
+      document.getElementById('service-performance').innerHTML = [...services].sort((a,b)=>b.bookings-a.bookings).map(s => `
+        <div>
+          <div class="flex justify-between text-sm mb-1"><span>${s.name}</span><span class="font-medium">${s.bookings}</span></div>
+          <div class="h-2 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-primary-500 rounded-full" style="width:${(s.bookings/maxSvc)*100}%"></div></div>
+        </div>
+      `).join('');
+    }
+
+    // Navigation
+    const titles = {
+      dashboard: ['Dashboard', 'Ringkasan hari ini'],
+      bookings: ['Booking', 'Kelola semua reservasi'],
+      services: ['Layanan', 'Daftar layanan yang tersedia'],
+      staff: ['Staf', 'Manajemen staf & jadwal'],
+      reports: ['Laporan', 'Analisis performa bisnis'],
+      settings: ['Pengaturan', 'Konfigurasi sistem']
+    };
+
+    function showPage(page) {
+      ['dashboard','bookings','services','staff','reports','settings'].forEach(p => {
+        document.getElementById('page-'+p).classList.add('hidden');
+      });
+      document.getElementById('page-'+page).classList.remove('hidden');
+      document.getElementById('page-title').textContent = titles[page][0];
+      document.getElementById('page-subtitle').textContent = titles[page][1];
+      document.querySelectorAll('.nav-item').forEach(el => {
+        el.classList.remove('active');
+        el.classList.add('text-slate-300');
+        if (el.dataset.page === page) {
+          el.classList.add('active');
+          el.classList.remove('text-slate-300');
+        }
+      });
+      // close mobile sidebar
+      if (window.innerWidth < 768) {
+        document.getElementById('sidebar').classList.add('hidden');
+        document.getElementById('sidebar').classList.remove('flex');
+      }
+    }
+
+    // Filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => {
+          b.classList.remove('active','bg-primary-600','text-white');
+          b.classList.add('bg-white','border','border-slate-200');
+        });
+        btn.classList.add('active','bg-primary-600','text-white');
+        btn.classList.remove('bg-white','border','border-slate-200');
+        renderBookings(btn.dataset.filter);
+      });
+    });
+
+    // Init
+    renderDashBookings();
+    renderTopServices();
+    renderBookings();
+    renderServices();
+    renderStaff();
+    renderReports();
+  </script>
+</body>
+</html>
+

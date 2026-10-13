@@ -1,0 +1,214 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Booking Saya â€” BookEase Pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: { 50:'#eff6ff',100:'#dbeafe',500:'#3b82f6',600:'#2563eb',700:'#1d4ed8' } },
+          fontFamily: { sans: ['Inter','system-ui','sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>body{font-family:'Inter',system-ui,sans-serif}</style>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen">
+
+  <nav class="bg-white border-b border-slate-200 sticky top-0 z-40">
+    <div class="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2 font-bold text-primary-700">
+        <i class="fa-solid fa-arrow-left text-sm"></i> BookEase Pro
+      </a>
+      <span class="text-sm text-slate-500">Booking Saya</span>
+    </div>
+  </nav>
+
+  <div class="max-w-2xl mx-auto px-4 py-8">
+
+    <!-- Login / Cari dengan nomor WA -->
+    <div id="login-box" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
+      <div class="text-center mb-5">
+        <div class="w-14 h-14 bg-primary-100 text-primary-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-3">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <h1 class="text-xl font-bold">Riwayat Booking Saya</h1>
+        <p class="text-sm text-slate-500 mt-1">Masukkan nomor WhatsApp yang dipakai saat booking</p>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium mb-1.5">Nomor WhatsApp</label>
+          <input type="tel" id="my-phone" placeholder="08xxxxxxxxxx" class="w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-500" />
+        </div>
+        <button onclick="loadMyBookings()" class="w-full bg-primary-600 text-white font-semibold py-3 rounded-xl hover:bg-primary-700 transition">
+          <i class="fa-solid fa-list mr-1"></i> Lihat Riwayat
+        </button>
+      </div>
+    </div>
+
+    <!-- Hasil -->
+    <div id="result-box" class="hidden">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h2 class="font-bold text-lg">Riwayat Booking</h2>
+          <p class="text-sm text-slate-500" id="result-phone"></p>
+        </div>
+        <button onclick="resetView()" class="text-sm text-primary-600 hover:underline">Ganti nomor</button>
+      </div>
+      <div id="booking-list" class="space-y-3"></div>
+      <div id="empty-state" class="hidden text-center py-12 bg-white rounded-2xl border border-slate-200">
+        <div class="w-14 h-14 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center text-2xl mx-auto mb-3">
+          <i class="fa-solid fa-calendar-xmark"></i>
+        </div>
+        <p class="font-medium text-slate-600">Belum ada booking</p>
+        <p class="text-sm text-slate-400 mt-1 mb-4">Nomor ini belum pernah melakukan booking</p>
+        <a href="booking.html" class="inline-block bg-primary-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-primary-700">Buat Booking</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Detail Modal -->
+  <div id="detail-modal" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/40" onclick="closeDetail()"></div>
+    <div class="relative bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+        <h3 class="font-bold">Detail Booking</h3>
+        <button onclick="closeDetail()" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 text-slate-500">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div id="detail-content" class="p-5 space-y-3 text-sm"></div>
+      <div class="px-5 pb-5">
+        <button onclick="closeDetail()" class="w-full border border-slate-200 py-2.5 rounded-xl font-medium hover:bg-slate-50">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const statusBadge = {
+      pending: 'bg-amber-100 text-amber-700',
+      confirmed: 'bg-green-100 text-green-700',
+      done: 'bg-slate-100 text-slate-600',
+      cancelled: 'bg-red-100 text-red-700'
+    };
+    const statusLabel = { pending:'Menunggu Konfirmasi', confirmed:'Dikonfirmasi', done:'Selesai', cancelled:'Dibatalkan' };
+    const statusIcon = { pending:'fa-clock', confirmed:'fa-check-circle', done:'fa-flag-checkered', cancelled:'fa-ban' };
+
+    function getAllBookings() {
+      const stored = JSON.parse(localStorage.getItem('bookease_bookings') || '[]');
+      const defaults = [
+        { code:'BE-A3F2K9', name:'Rina Wijaya', phone:'081234567890', service:'Potong Rambut', staff:'Budi Santoso', date:'2026-10-13', time:'09:00', price:75000, status:'confirmed', duration:45 },
+        { code:'BE-B7M1P4', name:'Andi Pratama', phone:'081398765432', service:'Facial Treatment', staff:'Sari Dewi', date:'2026-10-13', time:'10:30', price:150000, status:'pending', duration:60 },
+        { code:'BE-DEMO01', name:'Demo User', phone:'081234567890', service:'Creambath', staff:'Budi Santoso', date:'2026-10-15', time:'14:00', price:100000, status:'confirmed', duration:60 },
+      ];
+      const codes = new Set(stored.map(b => b.code));
+      const merged = [...stored];
+      defaults.forEach(b => { if (!codes.has(b.code)) merged.push(b); });
+      return merged;
+    }
+
+    function formatDate(d) {
+      if (!d) return '-';
+      try { return new Date(d+'T00:00:00').toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'}); }
+      catch { return d; }
+    }
+
+    function loadMyBookings() {
+      const phone = document.getElementById('my-phone').value.trim().replace(/\D/g,'');
+      if (!phone || phone.length < 10) { alert('Masukkan nomor WhatsApp yang valid'); return; }
+
+      const all = getAllBookings();
+      const mine = all.filter(b => {
+        const bp = (b.phone || '').replace(/\D/g,'');
+        return bp.includes(phone) || phone.includes(bp);
+      });
+
+      document.getElementById('login-box').classList.add('hidden');
+      document.getElementById('result-box').classList.remove('hidden');
+      document.getElementById('result-phone').textContent = 'Nomor: ' + phone;
+
+      const listEl = document.getElementById('booking-list');
+      const emptyEl = document.getElementById('empty-state');
+
+      if (mine.length === 0) {
+        listEl.innerHTML = '';
+        emptyEl.classList.remove('hidden');
+        return;
+      }
+      emptyEl.classList.add('hidden');
+
+      // Sort by date desc
+      mine.sort((a,b) => (b.date||'').localeCompare(a.date||'') || (b.time||'').localeCompare(a.time||''));
+
+      listEl.innerHTML = mine.map((b, i) => `
+        <div class="bg-white rounded-xl border border-slate-200 p-4 hover:shadow-md transition cursor-pointer" onclick="showDetail(${JSON.stringify(b).replace(/"/g,'&quot;')})">
+          <div class="flex items-start justify-between mb-2">
+            <div>
+              <div class="font-mono text-xs text-slate-400 mb-0.5">${b.code}</div>
+              <div class="font-semibold">${b.service}</div>
+            </div>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-full ${statusBadge[b.status]||statusBadge.pending}">
+              <i class="fa-solid ${statusIcon[b.status]||'fa-clock'} mr-1"></i>${statusLabel[b.status]||b.status}
+            </span>
+          </div>
+          <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500">
+            <span><i class="fa-solid fa-calendar mr-1"></i>${formatDate(b.date)}</span>
+            <span><i class="fa-solid fa-clock mr-1"></i>${b.time}</span>
+            <span><i class="fa-solid fa-user mr-1"></i>${b.staff}</span>
+          </div>
+          <div class="mt-2 pt-2 border-t border-slate-100 flex justify-between items-center">
+            <span class="font-bold text-primary-700 text-sm">Rp ${(b.price||0).toLocaleString('id-ID')}</span>
+            <span class="text-xs text-primary-600">Lihat detail â†’</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function showDetail(b) {
+      document.getElementById('detail-content').innerHTML = `
+        <div class="flex items-center justify-between">
+          <span class="font-mono font-bold">${b.code}</span>
+          <span class="text-xs font-semibold px-2.5 py-1 rounded-full ${statusBadge[b.status]||statusBadge.pending}">
+            <i class="fa-solid ${statusIcon[b.status]||'fa-clock'} mr-1"></i>${statusLabel[b.status]||b.status}
+          </span>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-3 space-y-2">
+          <div class="flex justify-between"><span class="text-slate-500">Nama</span><span class="font-medium">${b.name}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">WhatsApp</span><span class="font-medium">${b.phone}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Layanan</span><span class="font-medium">${b.service}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Staf</span><span class="font-medium">${b.staff}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Tanggal</span><span class="font-medium">${formatDate(b.date)}</span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Jam</span><span class="font-medium">${b.time}</span></div>
+          ${b.duration ? `<div class="flex justify-between"><span class="text-slate-500">Durasi</span><span class="font-medium">${b.duration} menit</span></div>` : ''}
+          <div class="flex justify-between border-t border-slate-200 pt-2"><span class="text-slate-500">Harga</span><span class="font-bold text-primary-700">Rp ${(b.price||0).toLocaleString('id-ID')}</span></div>
+          ${b.note ? `<div class="flex justify-between"><span class="text-slate-500">Catatan</span><span class="font-medium">${b.note}</span></div>` : ''}
+        </div>
+      `;
+      document.getElementById('detail-modal').classList.remove('hidden');
+    }
+
+    function closeDetail() {
+      document.getElementById('detail-modal').classList.add('hidden');
+    }
+
+    function resetView() {
+      document.getElementById('login-box').classList.remove('hidden');
+      document.getElementById('result-box').classList.add('hidden');
+      document.getElementById('my-phone').value = '';
+    }
+
+    document.getElementById('my-phone').addEventListener('keydown', e => {
+      if (e.key === 'Enter') loadMyBookings();
+    });
+  </script>
+</body>
+</html>
+
